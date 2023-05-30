@@ -1,14 +1,17 @@
 <script setup>
 import { ref } from "vue";
 import Question from './Question.vue'
+import Loading from './Loading.vue'
 
 const message = ref('')
 const questions = ref()
 const query = ref("")
 const isM = ref(false)
-
+const isLoadig = ref(false)
 
 const askQuiz = async () => {
+
+    isLoadig.value = true;
 
     console.log(query.value)
 
@@ -73,7 +76,7 @@ const askQuiz = async () => {
     console.log(jsonArray)
     questions.value = []
     questions.value = jsonArray
-
+    isLoadig.value = false;
 }
 
 
@@ -85,8 +88,8 @@ const askQuiz = async () => {
     <label class="label">What is your quiz about?</label>
 
     <input type="text" v-model="query" />
-
-    <button @click="askQuiz" :disabled="query === ''">Generate</button>
+    <Loading v-if="isLoadig"></Loading>
+    <button v-if="!isLoadig" @click="askQuiz" :disabled="query === ''">Generate</button>
     <br />
 
     <button v-show="isM === false" @click="isM = true" class="btn">Show Message</button>
